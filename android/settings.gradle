@@ -1,0 +1,33 @@
+pluginManagement {
+    def flutterSdkPath = {
+        def properties = new Properties()
+        file("local.properties").withInputStream { properties.load(it) }
+        def flutterSdkPath = properties.getProperty("flutter.sdk")
+        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
+        return flutterSdkPath
+    }()
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id 'com.android.application' version '7.2.2' apply false
+    id 'com.android.library' version '7.2.2' apply false
+}
+
+include ":app"
+
+def flutterSdkPath = new Properties()
+file("local.properties").withInputStream { flutterSdkPath.load(it) }
+def flutterSdkDir = flutterSdkPath.getProperty("flutter.sdk")
+assert flutterSdkDir != null, "flutter.sdk not set in local.properties"
+
+include ':app'
+
+includeBuild("${flutterSdkDir}/packages/flutter_tools/gradle")
